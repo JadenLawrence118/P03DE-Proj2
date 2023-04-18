@@ -13,6 +13,7 @@ public class HashIDs : MonoBehaviour
     public int shoutingBool;
     public int backwardsBool;
     public int sprintingBool;
+    public int movingBool;
 
     private void Awake()
     {
@@ -25,6 +26,7 @@ public class HashIDs : MonoBehaviour
         shoutingBool = Animator.StringToHash("Shouting");
         backwardsBool = Animator.StringToHash("Backwards");
         sprintingBool = Animator.StringToHash("Sprinting");
+        movingBool = Animator.StringToHash("Moving");
     }
 
 }
