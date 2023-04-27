@@ -44,6 +44,7 @@ public class VehicleAccess : MonoBehaviour
         {
             global.inVehicle = true;
             cam.TargetSwitch(GameObject.Find("MinerCameraTarget"));
+            GameObject.FindGameObjectWithTag("Player").SetActive(false);
         }
     }
 }
