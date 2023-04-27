@@ -103,7 +103,11 @@ public class PlayerMovement : MonoBehaviour
 
         if (sprinting)
         {
-            animationSpeed *= 2;
+            anim.speed = 2;
+        }
+        else
+        {
+            anim.speed = 1;
         }
     }
     void AudioManagement(bool shout)
@@ -115,7 +119,6 @@ public class PlayerMovement : MonoBehaviour
                 GetComponent<AudioSource>().pitch = 0.27f;
                 GetComponent<AudioSource>().Play();
             }
-            
         }
         else
         {
@@ -124,13 +127,6 @@ public class PlayerMovement : MonoBehaviour
         if (shout)
         {
             AudioSource.PlayClipAtPoint(shoutingClip, transform.position);
-
-            GameObject thisAudio = GameObject.Find("One shot audio");
-
-            if (thisAudio.name == "Z2 - V2 - Angry - Free - 1")
-            {
-                thisAudio.GetComponent<AudioSource>().pitch = pitchValue;
-            }
         }
     }
 }
