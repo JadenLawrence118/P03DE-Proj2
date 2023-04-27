@@ -33,7 +33,7 @@ public class MinerMovement : MonoBehaviour
             float v = Input.GetAxis("Vertical");
             float turn = Input.GetAxis("Turn");
             Rotating(turn);
-            MovementManagement(v);
+            MovementManagement(v, turn);
             elapsedTime += Time.deltaTime;
         }
     }
@@ -73,36 +73,26 @@ public class MinerMovement : MonoBehaviour
 
         if (turn > 0)
         {
-            anim.SetBool("Right Forward", false);
-            anim.SetBool("Right Back", true);
-            anim.SetBool("Left Back", false);
-            anim.SetBool("Left Forward", true);
-            anim.SetFloat("SpeedF", 1);
-            anim.SetFloat("SpeedB", -1);
+            anim.SetFloat("SpeedL", 1);
+            anim.SetFloat("SpeedR", -1);
         }
         else if (turn < 0)
         {
-            anim.SetBool("Right Back", false);
-            anim.SetBool("Right Forward", true);
-            anim.SetBool("Left Forward", false);
-            anim.SetBool("Left Back", true);
-            anim.SetFloat("SpeedF", 1);
-            anim.SetFloat("SpeedB", -1);
+            anim.SetFloat("SpeedL", -1);
+            anim.SetFloat("SpeedR", 1);
         }
     }
 
-    void MovementManagement(float vertical)
+    void MovementManagement(float vertical, float turn)
     {
         if (vertical > 0)
         {
-            anim.SetFloat("SpeedF", 1);
-            anim.SetFloat("SpeedB", -1);
+            anim.SetFloat("SpeedL", 1);
+            anim.SetFloat("SpeedR", 1);
+
             anim.SetFloat(hash.speedFloat, animationSpeed, speedDampTime, Time.deltaTime);
             noBackMov = true;
-            anim.SetBool("Right Back", false);
-            anim.SetBool("Left Back", false);
-            anim.SetBool("Right Forward", true);
-            anim.SetBool("Left Forward", true);
+
 
             float percentageComplete = elapsedTime / desiredDuration;
 
@@ -120,13 +110,9 @@ public class MinerMovement : MonoBehaviour
                 elapsedTime = 0;
                 noBackMov = false;
             }
-            anim.SetFloat("SpeedF", 1);
-            anim.SetFloat("SpeedB", -1);
-            anim.SetBool("Right Forward", false);
-            anim.SetBool("Left Forward", false);
-            anim.SetBool("Right Back", true);
-            anim.SetBool("Left Back", true);
-            
+            anim.SetFloat("SpeedL", -1);
+            anim.SetFloat("SpeedR", -1);
+
             float percentageComplete = elapsedTime / desiredDuration;
 
             anim.SetFloat(hash.speedFloat, -animationSpeed, speedDampTime, Time.deltaTime);
@@ -140,13 +126,13 @@ public class MinerMovement : MonoBehaviour
             ourBody.transform.position += moveBack;
         }
 
-        if (vertical == 0)
+        if (vertical == 0 && turn == 0)
         {
             anim.SetFloat(hash.speedFloat, 0);
             anim.SetBool(hash.backwardsBool, false);
             noBackMov = true;
-            anim.SetFloat("SpeedF", 0);
-            anim.SetFloat("SpeedB", 0);
+            anim.SetFloat("SpeedL", 0);
+            anim.SetFloat("SpeedR", 0);
         }
     }
 
