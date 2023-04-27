@@ -5,11 +5,16 @@ using UnityEngine;
 public class VehicleAccess : MonoBehaviour
 {
     private bool inVehicle = false;
+    private FollowCamera cam;
+    private Globals global;
 
+    private void Awake()
+    {
+        cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<FollowCamera>();
+        global = GameObject.FindGameObjectWithTag("GameController").GetComponent<Globals>();
+    }
     private void OnTriggerEnter(Collider other)
     {
-        print("hello");
-
         GameObject PlayerCharacter = GameObject.FindGameObjectWithTag("Player");
         Collider PlayerCollider = PlayerCharacter.GetComponent<Collider>();
 
@@ -33,12 +38,12 @@ public class VehicleAccess : MonoBehaviour
     private void Update()
     {
         GameObject PlayerCharacter = GameObject.FindGameObjectWithTag("Player");
-        GameObject Vehicle = GameObject.FindGameObjectWithTag("Vehicle");
+        GameObject Miner = GameObject.FindGameObjectWithTag("Vehicle");
 
-        if (Input.GetButton("Interact") && inVehicle)
+        if (Input.GetButtonUp("Interact") && inVehicle)
         {
-            PlayerCharacter.SetActive(false);
-
+            global.inVehicle = true;
+            cam.TargetSwitch(GameObject.Find("MinerCameraTarget"));
         }
     }
 }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class FollowCamera : MonoBehaviour
 {
+    private Globals global;
+
     public GameObject target;
     public Vector3 offset;
 
@@ -14,10 +16,10 @@ public class FollowCamera : MonoBehaviour
     private void Start()
     {
         offset = transform.position - target.transform.position;
+        global = GameObject.FindGameObjectWithTag("GameController").GetComponent<Globals>();
     }
     private void LateUpdate()
     {
-
         float angleBetween = Vector3.Angle(Vector3.up, transform.forward);
         float desiredAngle = target.transform.eulerAngles.y;
         float dist = Vector3.Distance(target.transform.position, transform.position);
@@ -47,7 +49,11 @@ public class FollowCamera : MonoBehaviour
 
         if (mouseZ < 0)
         {
-            if (dist < 10)
+            if (!global.inVehicle && dist < 10)
+            {
+                offset = Vector3.Scale(offset, new Vector3(1.05f, 1.05f, 1.05f));
+            }
+            else if (global.inVehicle && dist < 20)
             {
                 offset = Vector3.Scale(offset, new Vector3(1.05f, 1.05f, 1.05f));
             }
@@ -59,5 +65,9 @@ public class FollowCamera : MonoBehaviour
                 offset = Vector3.Scale(offset, new Vector3(0.95f, 0.95f, 0.95f));
             }
         }
+    }
+    public void TargetSwitch(GameObject newTarget)
+    {
+        target = newTarget;
     }
 }

@@ -15,27 +15,35 @@ public class MinerMovement : MonoBehaviour
     public float sensitivityX = 1.0f;
     public float animationSpeed = 1.5f;
     public float pitchValue;
+    private Globals global;
 
     private void Awake()
     {
         anim = GetComponent<Animator>();
         hash = GameObject.FindGameObjectWithTag("GameController").GetComponent<HashIDs>();
         anim.SetLayerWeight(1, 1f);
+        global = GameObject.FindGameObjectWithTag("GameController").GetComponent<Globals>();
     }
 
     void FixedUpdate()
     {
-        float v = Input.GetAxis("Vertical");
-        float turn = Input.GetAxis("Turn");
-        Rotating(turn);
-        MovementManagement(v);
-        elapsedTime += Time.deltaTime;
+        if (global.inVehicle)
+        {
+            float v = Input.GetAxis("Vertical");
+            float turn = Input.GetAxis("Turn");
+            Rotating(turn);
+            MovementManagement(v);
+            elapsedTime += Time.deltaTime;
+        }
     }
     void Update()
     {
-        bool shout = Input.GetButtonDown("Attract");
-        anim.SetBool(hash.shoutingBool, shout);
-        AudioManagement();
+        if (global.inVehicle)
+        {
+            bool shout = Input.GetButtonDown("Attract");
+            anim.SetBool(hash.shoutingBool, shout);
+            AudioManagement();
+        }
     }
 
     void Rotating(float mouseXInput)
@@ -65,6 +73,15 @@ public class MinerMovement : MonoBehaviour
             anim.SetBool("Left Back", false);
             anim.SetBool("Right Forward", true);
             anim.SetBool("Left Forward", true);
+
+            float percentageComplete = elapsedTime / desiredDuration;
+
+            Rigidbody ourBody = this.GetComponent<Rigidbody>();
+            ourBody.MoveRotation(ourBody.rotation);
+            float movement = Mathf.Lerp(0f, 0.025f, percentageComplete);
+            Vector3 moveBack = new Vector3(movement, 0f, 0f);
+            moveBack = ourBody.transform.TransformDirection(moveBack);
+            ourBody.transform.position += moveBack;
         }
         if (vertical < 0)
         {
@@ -87,7 +104,7 @@ public class MinerMovement : MonoBehaviour
             Rigidbody ourBody = this.GetComponent<Rigidbody>();
             ourBody.MoveRotation(ourBody.rotation);
             float movement = Mathf.Lerp(0f, -0.025f, percentageComplete);
-            Vector3 moveBack = new Vector3(0f, 0f, movement);
+            Vector3 moveBack = new Vector3(movement, 0f, 0f);
             moveBack = ourBody.transform.TransformDirection(moveBack);
             ourBody.transform.position += moveBack;
         }

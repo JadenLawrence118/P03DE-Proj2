@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     private Animator anim;
     private HashIDs hash;
+    private Globals global;
     private float elapsedTime = 0;
     private bool noBackMov = true;
     private float desiredDuration = 0.5f;
@@ -20,24 +21,31 @@ public class PlayerMovement : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         hash = GameObject.FindGameObjectWithTag("GameController").GetComponent<HashIDs>();
+        global = GameObject.FindGameObjectWithTag("GameController").GetComponent<Globals>();
         anim.SetLayerWeight(1, 1f);
     }
 
     void FixedUpdate()
     {
-        float v = Input.GetAxis("Vertical");
-        bool sneak = Input.GetButton("Sneak");
-        bool sprint = Input.GetButton("Sprint");
-        float turn = Input.GetAxis("Turn");
-        Rotating(turn);
-        MovementManagement(v, sneak, sprint);
-        elapsedTime += Time.deltaTime;
+        if (!global.inVehicle)
+        {
+            float v = Input.GetAxis("Vertical");
+            bool sneak = Input.GetButton("Sneak");
+            bool sprint = Input.GetButton("Sprint");
+            float turn = Input.GetAxis("Turn");
+            Rotating(turn);
+            MovementManagement(v, sneak, sprint);
+            elapsedTime += Time.deltaTime;
+        }
     }
     void Update()
     {
-        bool shout = Input.GetButtonDown("Attract");
-        anim.SetBool(hash.shoutingBool, shout);
-        AudioManagement(shout);
+        if (!global.inVehicle)
+        {
+            bool shout = Input.GetButtonDown("Attract");
+            anim.SetBool(hash.shoutingBool, shout);
+            AudioManagement(shout);
+        }
     }
 
     void Rotating(float mouseXInput)
