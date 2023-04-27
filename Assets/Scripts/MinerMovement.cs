@@ -42,7 +42,6 @@ public class MinerMovement : MonoBehaviour
         {
             bool shout = Input.GetButtonDown("Attract");
             anim.SetBool(hash.shoutingBool, shout);
-            AudioManagement();
         }
     }
 
@@ -115,21 +114,6 @@ public class MinerMovement : MonoBehaviour
             anim.SetBool(hash.backwardsBool, false);
             noBackMov = true;
             anim.speed = 0;
-        }
-    }
-    void AudioManagement()
-    {
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Moving"))
-        {
-            if (!GetComponent<AudioSource>().isPlaying)
-            { //not is playing rather than isNotPlaying
-                GetComponent<AudioSource>().pitch = 0.27f;
-                GetComponent<AudioSource>().Play();
-            }
-        }
-        else
-        {
-            GetComponent<AudioSource>().Stop();
         }
     }
 }
